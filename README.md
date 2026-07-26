@@ -32,13 +32,11 @@ python3 run_portfolio.py      # ~1-2 minutes
 - `clean_sp500_stock_2018_2023.csv`: 501 companies, monthly OHLCV + `mo_return`,
   January 2018-May 2023 (65 months). Companies with fewer than 60 months of history
   (mostly 2020-2022 spin-offs/IPOs: GEHC, CEG, OGN, OTIS, CARR, CTVA, FOXA, FOX, DOW,
-  MRNA) are dropped as a robustness step, leaving **491 companies** — this mirrors the
-  paper's own stated robustness filter ("organisations with clear data abnormalities
-  and those with inadequate data volume owing to shorter listing dates were omitted").
+  MRNA) are dropped as a robustness step, leaving **491 companies** 
 - `clean_sp500_index_2018_2023.csv`: S&P 500 index monthly return over the same
   period, used as a market-return feature.
 
-## Documented modelling choices (where the paper is ambiguous)
+## Documented modelling choices 
 
 1. **Feature set.**  We use, for each (company, month): the three preceding
    months' returns (`lag1`, `lag2`, `lag3`), a 3-month rolling mean and standard
@@ -53,8 +51,7 @@ python3 run_portfolio.py      # ~1-2 minutes
 4. **Table 3 (mean/σ/σ²).** Computed as five independent repeats of the same
    best-split ratio with different random partitions (documented as `N_REPEATS=5` in
    `run_prediction.py`, reduced from a notional 10 for tractability in this
-   environment), matching the "ten randomised experiments... averaged" logic the
-   paper uses elsewhere for the SA results.
+   environment), matching the "ten randomised experiments... averaged"
 5. **Candidate-pool ("top-10") prediction.** Each model is trained on its best
    split's training data, then used to predict a return for every company's *most
    recent* available feature row (May 2023). 
@@ -65,8 +62,6 @@ python3 run_portfolio.py      # ~1-2 minutes
    allocation) are applied to the realised historical monthly returns of the same
    10 stocks across the *entire* sample to produce a compounding cumulative-return
    curve, benchmarked against an equal-weight (1/N) portfolio on the same 10 stocks.
-   This is an **in-sample** backtest (the weights are optimised using information
-   -- the covariance matrix.
 8. **RNN epochs.** Table 1 specifies `epochs=500`; this is reduced to 30 in
    `models.py` purely for tractability in this environment (CPU-only, 2 cores). This
    is a real, material deviation and is likely the main reason the RNN's relative
