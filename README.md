@@ -40,8 +40,7 @@ python3 run_portfolio.py      # ~1-2 minutes
 
 ## Documented modelling choices (where the paper is ambiguous)
 
-1. **Feature set.** The paper says only that "monthly returns of stocks are used as
-   an input variable". We use, for each (company, month): the three preceding
+1. **Feature set.**  We use, for each (company, month): the three preceding
    months' returns (`lag1`, `lag2`, `lag3`), a 3-month rolling mean and standard
    deviation of return, month-over-month volume change, and the S&P 500 index return
    for that month. Target = that month's realised return. 
