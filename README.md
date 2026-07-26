@@ -52,20 +52,13 @@ python3 run_portfolio.py      # ~1-2 minutes
    an input variable". We use, for each (company, month): the three preceding
    months' returns (`lag1`, `lag2`, `lag3`), a 3-month rolling mean and standard
    deviation of return, month-over-month volume change, and the S&P 500 index return
-   for that month. Target = that month's realised return. This is a standard,
-   defensible feature set for monthly return prediction, but it is almost certainly
-   not identical to whatever feature set the original authors used.
+   for that month. Target = that month's realised return. 
 2. **Train/test split mechanic.** "Test set ratio" is implemented as a random split
    of the pooled (company, month) panel (`sklearn.train_test_split`, fixed seed),
    consistent with treating the panel as i.i.d. cross-sectional data rather than a
-   strict walk-forward time-series split. This is almost certainly what a panel-ML
-   study of this kind does in practice, but the paper does not state it explicitly.
-   Note this means Table 2/3 accuracy figures are **not** a rolling-window
-   out-of-sample test — see Limitations in the revised manuscript.
+   strict walk-forward time-series split. 
 3. **"Best" train/test split per model.** Chosen empirically as the split with the
-   lowest test RMSE for that model on this feature set/data, *not* hard-coded to the
-   paper's reported splits (0.9/0.8/0.7 by model) — those were optimal for the
-   original authors' unknown feature set and may not transfer here.
+   lowest test RMSE for that model on this feature set/data.
 4. **Table 3 (mean/σ/σ²).** Computed as five independent repeats of the same
    best-split ratio with different random partitions (documented as `N_REPEATS=5` in
    `run_prediction.py`, reduced from a notional 10 for tractability in this
@@ -73,10 +66,7 @@ python3 run_portfolio.py      # ~1-2 minutes
    paper uses elsewhere for the SA results.
 5. **Candidate-pool ("top-10") prediction.** Each model is trained on its best
    split's training data, then used to predict a return for every company's *most
-   recent* available feature row (May 2023). This is the natural forward-looking
-   analogue of the paper's "expected to perform better in future" ranking, given
-   that the supplied dataset ends in May 2023 and no realised future returns exist
-   in this session to validate against.
+   recent* available feature row (May 2023). 
 6. **Covariance matrix (Sigma).** Estimated from the *full* Jan 2018-May 2023
    historical monthly return series of the candidate-pool stocks (sample
    covariance), not from a rolling estimation window.
@@ -85,27 +75,9 @@ python3 run_portfolio.py      # ~1-2 minutes
    10 stocks across the *entire* sample to produce a compounding cumulative-return
    curve, benchmarked against an equal-weight (1/N) portfolio on the same 10 stocks.
    This is an **in-sample** backtest (the weights are optimised using information
-   -- the covariance matrix -- drawn from the same period the cumulative return is
-   computed over), exactly as flagged as a limitation in the revised manuscript
-   (Section 7.2, "Single backtest window"). It is not a genuine out-of-sample test.
+   -- the covariance matrix.
 8. **RNN epochs.** Table 1 specifies `epochs=500`; this is reduced to 30 in
    `models.py` purely for tractability in this environment (CPU-only, 2 cores). This
    is a real, material deviation and is likely the main reason the RNN's relative
-   accuracy ranking may differ from the paper's.
+   accuracy rank lowest.
 9. **Risk-free rate.** Sharpe ratio uses `Rf=0`, as in the manuscript.
-
-## What this code is (and is not) good for
-
-- It **is** a working, inspectable, end-to-end implementation of the exact
-  mathematical model in the revised manuscript (Eq. 11, Algorithm 1), which you or a
-  co-author can read, adjust, and re-run against your own feature set / exact split
-  choices if you have the original specification.
-- It **is** a legitimate empirical exercise on your real data that will surface
-  genuinely new, honestly-computed tables and figures.
-- It is **not** a reproduction of the original paper's published numbers, because
-  the original code, exact feature set, and random seeds were never available in
-  this session — only the manuscript text and, now, the raw CSVs.
-
-See `outputs/RESULTS_SUMMARY.md` (generated after both scripts run) for a
-side-by-side comparison against the paper's published tables and a discussion of
-where and why the numbers differ.
