@@ -7,13 +7,6 @@ from data import wide_returns
 
 MODELS = ["RF", "AdaBoost", "XGBoost", "SVR", "KNN", "RNN"]
 
-# A 10-colour, high-contrast qualitative palette (tab10) is used consistently
-# within each subplot below, so no company ever shares a colour with another
-# company in the *same* panel. Distinguishing 45+ lines by colour alone on a
-# single axes is not achievable at any palette size, so the union spaghetti
-# plot used previously is replaced by small multiples: one panel per model,
-# each with only its own top-10 candidate pool (<=10 lines), which keeps
-# every line individually traceable.
 per_model = {}
 union = set()
 for m in MODELS:
