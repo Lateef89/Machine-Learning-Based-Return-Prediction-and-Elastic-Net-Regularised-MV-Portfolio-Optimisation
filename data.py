@@ -7,14 +7,6 @@ Loads the two datasets supplied by the user:
   - clean_sp500_index_2018_2023.csv   (S&P 500 index monthly OHLCV + mo_return, same period)
 
 and builds a supervised-learning panel for next-month stock-return prediction.
-
-IMPORTANT — methodological note
---------------------------------
- We construct a standard, defensible lag/rolling-statistics feature set (see
-`FEATURE_COLS` below) rather than guessing at undocumented choices. This is
-stated explicitly so results can be compared on a like-for-like basis rather
-than assumed to reproduce the paper's published numbers exactly. See
-README.md for the full list of assumptions.
 """
 import numpy as np
 import pandas as pd
