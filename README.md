@@ -1,20 +1,12 @@
 # Reference implementation: ML return prediction + elastic-net MVP + simulated annealing
 
-This is a from-scratch, faithful reimplementation of the methodology described in
+This is a from-scratch implementation of the methodology described in
 "Machine Learning-Based Return Prediction and Elastic-Net Regularised Mean–Variance
 Portfolio Optimisation via Simulated Annealing" (the revised manuscript), run against
 the real dataset you supplied (`clean_sp500_stock_2018_2023.csv`,
 `clean_sp500_index_2018_2023.csv`).
 
-**Read this before comparing numbers to the paper.** The manuscript specifies the
-*model* (equations, hyperparameter values, SA schedule) precisely, but does not fully
-specify the feature engineering, the exact train/test split mechanics, or how the
-"top-10 candidate pool" prediction is generated for a period beyond the end of the
-data. Wherever the paper is silent, this code makes an explicit, documented choice
-(below) rather than a hidden one. **The numbers this code produces will not match the
-paper's published tables exactly** — they are a genuine, independent re-run of the
-same methodology on the same data, not a reproduction of the original authors' exact
-pipeline (which was never supplied to this session).
+
 
 ## Files
 
