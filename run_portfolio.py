@@ -32,13 +32,6 @@ from data import wide_returns
 from portfolio import simulated_annealing, run_sa_multi, sharpe_ratio, equal_weight
 
 OUT = "outputs"
-# Regularisation strength. The value originally taken from Yen & Yen (2014)'s
-# reported optimum, alpha=0.06, was calibrated for a different dataset and,
-# at this sample's return/covariance scale, was found (see alpha_search.py)
-# to dominate the risk-return trade-off terms of Eq. (11) so completely that
-# the SA-optimised mixing parameter r* collapsed to ~0 for every predictor/
-# regime combination and no weight was ever driven below the sparsity
-# threshold. alpha=0.001 was selected by a validation grid search
 # (alpha_search.py): a train/validation split of the sample scores each
 # candidate alpha on realised validation-period Sharpe ratio against the
 # equal-weight (1/N) benchmark, and alpha=0.001 attains the highest win rate
