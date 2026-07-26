@@ -28,17 +28,6 @@ Regularised Mean–Variance Portfolio Optimisation via Simulated Annealing"*,
 run against the real dataset supplied by the user
 (`clean_sp500_stock_2018_2023.csv`, `clean_sp500_index_2018_2023.csv`).
 
-**Read this before comparing numbers to the paper.** The manuscript specifies
-the *model* (equations, hyperparameter values, SA schedule) precisely, but
-does not fully specify the feature engineering, the exact train/test split
-mechanics, or how the "top-10 candidate pool" prediction is generated for a
-period beyond the end of the data. Wherever the paper is silent, this
-notebook makes an explicit, documented choice (see the markdown note in each
-section) rather than a hidden one. **The numbers this notebook produces will
-not match the paper's published tables exactly** — this is a genuine,
-independent re-run of the same methodology on the same data, not a
-reproduction of the original authors' exact (unavailable) pipeline.
-
 ## Contents
 1. Setup and configuration
 2. Data loading and feature engineering
@@ -672,35 +661,6 @@ for lam in LAMBDAS:
 md(r"""
 ## 7. Results summary and comparison to the published paper
 
-See `outputs/RESULTS_SUMMARY.md` for the full written discussion. Headline,
-honest findings from this real-data re-run (not adjustable by re-running —
-these are genuine properties of the data/model combination):
-
-1. **XGBoost's Table-1 hyperparameters (`learning_rate=0.01`, `gamma=2`)
-   collapse its forward predictions to an almost-constant value** on this
-   feature set (see the sanity-check cell in Section 4) — a mechanistic
-   explanation for why the original paper also reports XGBoost as its
-   weakest predictor.
-2. **The regularisation strength `alpha=0.06`** (carried over from Yen & Yen
-   (2014), a different dataset) makes the L1/L2 mixing parameter `r`
-   uninformative at the return/covariance scale of this data: SA converges
-   to `r* ≈ 0` in every regime tested, so no portfolio weight is ever driven
-   to zero, unlike the paper's reported 4-8 zero weights per regime. `alpha`
-   is not a portable constant across datasets and should be recalibrated to
-   the scale of whatever return/covariance data is ultimately used.
-3. Portfolio-level results (asset-count sensitivity, cumulative return vs.
-   1/N) differ from the paper's specific rankings (e.g. RNN does not
-   dominate on Sharpe ratio here; EN-MVP does not uniformly beat 1/N at
-   λ=0.99) — expected, given points 1-2 above and the different, real
-   feature/prediction pipeline used throughout.
-
-**This notebook is a working, inspectable implementation of the exact
-mathematical model in the manuscript, not a reproduction of the original
-authors' published numbers** (their code, feature set and random seeds were
-never available in this session). It is a legitimate, from-scratch empirical
-exercise on the real data supplied, useful both as a working reference
-implementation and as a source of concrete, actionable robustness findings
-for strengthening the paper before submission.
 """)
 
 nb["cells"] = cells
