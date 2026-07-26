@@ -10,9 +10,7 @@ and builds a supervised-learning panel for next-month stock-return prediction.
 
 IMPORTANT — methodological note
 --------------------------------
-The manuscript does not specify an exact feature set for the six prediction
-models beyond "monthly returns ... used as an input variable". We therefore
-construct a standard, defensible lag/rolling-statistics feature set (see
+ We construct a standard, defensible lag/rolling-statistics feature set (see
 `FEATURE_COLS` below) rather than guessing at undocumented choices. This is
 stated explicitly so results can be compared on a like-for-like basis rather
 than assumed to reproduce the paper's published numbers exactly. See
