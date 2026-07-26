@@ -1,40 +1,4 @@
-"""
-alpha_search.py
-================
-Resolves the "uncalibrated regularisation strength" limitation flagged in the
-manuscript: alpha=0.06 was carried over from Yen & Yen (2014) for a different
-dataset and, at that magnitude, dominates the risk-return trade-off terms of
-Eq. (11) at this sample's return/covariance scale, driving the SA-optimised
-mixing parameter r* to ~0 for every predictor/regime combination.
 
-This script performs the small validation grid search the manuscript's
-Limitations/Future work sections call for: a train/validation split of the
-65-month sample is used to estimate the covariance matrix out of the data
-window used to score candidate alpha values, so the selected alpha is chosen
-by realised validation-period performance rather than in-sample fit.
-
-  - Train window: months 0-47 (Jan 2018-Dec 2021, 48 months) -> Sigma_train
-  - Validation window: months 48-64 (Jan 2022-May 2023, 17 months) -> scoring
-  - mu (predicted expected return) is the same forward snapshot used
-    throughout the manuscript (Section 4.2); it is not re-estimated per
-    window, consistent with the rest of the pipeline (see Limitations).
-
-For each candidate alpha, weights are solved by the same joint (x,r)
-simulated-annealing algorithm (Algorithm 1) using Sigma_train and the
-model's mu, for all 6 predictors x 2 risk regimes (lambda in {0.01, 0.99}),
-and scored on the validation window's realised Sharpe ratio and cumulative
-return against the equal-weight (1/N) benchmark on the same candidate pool.
-
-Search-phase SA runs use reduced settings (n_runs=3, inner_iter=50 instead
-of the manuscript's 10 runs / 100 inner iterations) purely for tractability
-in a 2-core environment; this is a documented compute deviation, exactly
-like the RF max_features / RNN epoch deviations in Table 1. The final
-alpha's reported tables/figures (produced by run_portfolio.py after this
-script) use the manuscript's full SA settings.
-
-Run: python3 alpha_search.py   (~10-15 minutes on 2 cores; writes progress
-incrementally to outputs/alpha_search_log.csv so it can be monitored/resumed)
-"""
 import time
 import numpy as np
 import pandas as pd
